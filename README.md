@@ -44,7 +44,7 @@ To predict the breed of a cat in an image, upload the image through the web appl
 
 - Model accuracy: XX%
 - Confusion matrix:
-  ![Confusion Matrix](path_to_confusion_matrix_image)
+
 
 ## Contributing
 
