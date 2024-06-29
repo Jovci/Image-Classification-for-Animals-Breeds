@@ -3,9 +3,9 @@ import pandas as pd
 import xml.etree.ElementTree as ET
 
 # Define directories
-annotations_dir = r'J:/cattorch/pytorch/data/annotations/xmls'  # Use raw strings or forward slashes
-images_dir = r'J:/cattorch/pytorch/data/images'
-output_dir = r'J:\cattorch\pytorch\data\processed'
+annotations_dir = '../data/annotations/xmls'  # Use raw strings or forward slashes
+images_dir = '../data/images'
+output_dir = '../data/processed'
 
 # Function to extract data from XML file
 def extract_data_from_xml(xml_file, breed_to_id):
