@@ -38,17 +38,17 @@ for epoch in range(num_epochs):
     running_loss = 0.0
     print(f'Starting epoch {epoch+1}/{num_epochs}')
     for i, (images, labels) in enumerate(train_loader):
-        # debugging: print labels to check their range
+        # Debugging: print labels to check their range
         print(f'Batch {i} labels: {labels.tolist()}')
         
-        images, labels = images.to(device), labels.to(device)  
+        images, labels = images.to(device), labels.to(device)  # Move data to GPU
         optimizer.zero_grad()
         outputs = model(images)
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
         running_loss += loss.item()
-        if i % 10 == 0:  
+        if i % 10 == 0:  # Print every 10 batches
             print(f'Batch {i}/{len(train_loader)}, Loss: {loss.item():.4f}')
     print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {running_loss/len(train_loader):.4f}')
 
