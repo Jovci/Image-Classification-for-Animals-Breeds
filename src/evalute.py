@@ -21,7 +21,8 @@ test_dataset = CatBreedDataset('../data/processed/test_labels.csv', '../data/ima
 test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 
 # Load model and move to GPU if available
-model = get_model(num_classes=len(test_dataset.img_labels['breed_id'].unique()))  # Adjust num_classes
+num_classes = 2  # Adjust this based on your actual number of classes
+model = get_model(num_classes=num_classes)
 model.load_state_dict(torch.load('../saved_models/cat_breed_model.pth'))
 model.to(device)
 model.eval()
@@ -39,7 +40,7 @@ with torch.no_grad():
 
 # Calculate accuracy and classification report
 accuracy = accuracy_score(all_labels, all_preds)
-report = classification_report(all_labels, all_preds, target_names=test_dataset.img_labels['breed_id'].unique().astype(str))
+report = classification_report(all_labels, all_preds, target_names=['Abyssinian', 'Bengal'])  # Adjust names
 
 print(f'Accuracy: {accuracy:.4f}')
 print('Classification Report:')

@@ -1,51 +1,60 @@
 import os
 import pandas as pd
-import xml.etree.ElementTree as ET
 
-# Define directories
-annotations_dir = '../data/annotations/xmls'  # Use raw strings or forward slashes
-images_dir = '../data/images'
-output_dir = '../data/processed'
+# Paths to dataset files
+list_file_path = r'../data/annotations/list.txt'  # Corrected path to your list.txt file
+trainval_file_path = r'../data/annotations/trainval.txt'  # Corrected path to your trainval.txt file
+test_file_path = r'../data/annotations/test.txt'  # Corrected path to your test.txt file
 
-# Function to extract data from XML file
-def extract_data_from_xml(xml_file, breed_to_id):
-    tree = ET.parse(xml_file)
-    root = tree.getroot()
-    breed_name = root.find('object/name').text
-    data = {
-        'file_name': root.find('filename').text,
-        'breed_id': breed_to_id[breed_name]
-    }
-    return data
+# Read list.txt to get the mapping
+with open(list_file_path, 'r') as file:
+    lines = file.readlines()
 
-# Get a list of all breeds
-breed_names = set()
-for xml_file in os.listdir(annotations_dir):
-    if xml_file.endswith('.xml'):
-        tree = ET.parse(os.path.join(annotations_dir, xml_file))
-        root = tree.getroot()
-        breed_name = root.find('object/name').text
-        breed_names.add(breed_name)
-
-# Create a mapping from breed name to unique integer ID
-breed_to_id = {breed_name: idx for idx, breed_name in enumerate(sorted(breed_names))}
-
-# Extract data from all XML files
+# Process the lines to extract the mapping, skipping the header lines
 data = []
-for xml_file in os.listdir(annotations_dir):
-    if xml_file.endswith('.xml'):
-        data.append(extract_data_from_xml(os.path.join(annotations_dir, xml_file), breed_to_id))
+for line in lines[6:]:  # Skip the first 6 lines which contain the header information
+    parts = line.strip().split(' ')
+    if len(parts) == 4:
+        file_name = parts[0] + '.jpg'
+        class_id = int(parts[1]) - 1  # Adjust class_id to be 0-based
+        species = int(parts[2])
+        breed_id = int(parts[3])
+        data.append([file_name, class_id, species, breed_id])
 
-# Convert to DataFrame
-df = pd.DataFrame(data)
+# Create a DataFrame
+df = pd.DataFrame(data, columns=['file_name', 'class_id', 'species', 'breed_id'])
 
-# Split into train and test sets (assuming an 80-20 split)
-train_df = df.sample(frac=0.8, random_state=42)
-test_df = df.drop(train_df.index)
+# Print the first few rows of the DataFrame for debugging
+print("DataFrame created from list.txt:")
+print(df.head())
 
-# Save to CSV
-os.makedirs(output_dir, exist_ok=True)
-train_df.to_csv(os.path.join(output_dir, 'train_labels.csv'), index=False)
-test_df.to_csv(os.path.join(output_dir, 'test_labels.csv'), index=False)
+# Read trainval.txt and test.txt to create train and test splits
+with open(trainval_file_path, 'r') as file:
+    trainval_files = [line.strip().split(' ')[0] + '.jpg' for line in file.readlines()]
 
-print("CSV files created successfully!")
+with open(test_file_path, 'r') as file:
+    test_files = [line.strip().split(' ')[0] + '.jpg' for line in file.readlines()]
+
+# Print the first few entries of trainval_files and test_files for debugging
+print("First few entries of trainval_files:")
+print(trainval_files[:5])
+
+print("First few entries of test_files:")
+print(test_files[:5])
+
+# Split the DataFrame into train and test sets
+train_df = df[df['file_name'].isin(trainval_files)]
+test_df = df[df['file_name'].isin(test_files)]
+
+# Print the first few rows of the train and test DataFrames for debugging
+print("Train DataFrame:")
+print(train_df.head())
+
+print("Test DataFrame:")
+print(test_df.head())
+
+# Save the train and test labels to CSV files
+train_df.to_csv('train_labels.csv', index=False)
+test_df.to_csv('test_labels.csv', index=False)
+
+print("CSV files for train and test labels have been created successfully!")
