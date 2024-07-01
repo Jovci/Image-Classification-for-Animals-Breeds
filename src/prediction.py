@@ -34,7 +34,7 @@ class_names = {
     11: 'Egyptian Mau',
     12: 'English Cocker Spaniel',
     13: 'English Setter',
-    14: 'German Shorthaired',
+    14: 'German Shorthaired Pointer',
     15: 'Great Pyrenees',
     16: 'Havanese',
     17: 'Japanese Chin',
@@ -44,19 +44,19 @@ class_names = {
     21: 'Miniature Pinscher',
     22: 'Newfoundland',
     23: 'Persian',
-    24: 'Ragdoll',
-    25: 'Russian Blue',
-    26: 'Samoyed',
-    27: 'Scottish Terrier',
-    28: 'Shiba Inu',
-    29: 'Siamese',
-    30: 'Sphynx',
-    31: 'Staffordshire Bull Terrier',
-    32: 'Wheaten Terrier',
-    33: 'Yorkshire Terrier',
-    34: 'Class 34',  # Replace with actual class names if available
-    35: 'Class 35',
-    36: 'Class 36'
+    24: 'Pomeranian',
+    25: 'Pug',
+    26: 'Ragdoll',
+    27: 'Russian Blue',
+    28: 'Samoyed',
+    29: 'Scottish Terrier',
+    30: 'Shiba Inu',
+    31: 'Siamese',
+    32: 'Sphynx',
+    33: 'Staffordshire Bull Terrier',
+    34: 'Wheaten Terrier',
+    35: 'Yorkshire Terrier',
+    36: 'Saint Bernard'
 }
 
 # Load model and move to GPU if available
@@ -74,7 +74,7 @@ def predict(image_path):
     return predicted.item()
 
 # Example usage
-image_path = r'../data/test/cannoli_box.jpg'  # Use raw string for the path
+image_path = r'../data/test/siamese.jpg'  
 predicted_class = predict(image_path)
 class_name = class_names[predicted_class]
 print(f'Predicted class ID: {predicted_class}, Class Name: {class_name}')
