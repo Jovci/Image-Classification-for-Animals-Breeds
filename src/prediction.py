@@ -2,21 +2,6 @@ import torch
 from torchvision import transforms
 from PIL import Image
 from model import get_model
-import torch.nn as nn
-
-# Check if GPU is available
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f'Using device: {device}')
-
-# Define transformations
-transform = transforms.Compose([
-    transforms.Resize((224, 224)),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-])
-
-# Number of classes (ensure this matches the number of classes used during training)
-num_classes = 37 
 
 # Class names mapping
 class_names = {
@@ -59,22 +44,26 @@ class_names = {
     36: 'Saint Bernard'
 }
 
-# Load model and move to GPU if available
-model = get_model(num_classes=num_classes)
-model.load_state_dict(torch.load('../saved_models/cat_breed_model_finetuned.pth'))
-model.to(device)
-model.eval()
-
-def predict(image_path):
+def predict(image_path, model_path, transform):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f'Using device: {device}')
+    
+    # Load model
+    model = get_model(num_classes=len(class_names))
+    model.load_state_dict(torch.load(model_path))
+    model.to(device)
+    model.eval()
+    
+    # Preprocess the image
     image = Image.open(image_path).convert('RGB')
     image = transform(image).unsqueeze(0).to(device)
+    
+    # Make prediction
     with torch.no_grad():
         outputs = model(image)
         _, predicted = torch.max(outputs, 1)
-    return predicted.item()
-
-# Usage
-image_path = r'../data/test/siamese.jpg'  
-predicted_class = predict(image_path)
-class_name = class_names[predicted_class]
-print(f'Predicted class ID: {predicted_class}, Class Name: {class_name}')
+    
+    class_id = predicted.item()
+    class_name = class_names[class_id]
+    
+    return class_id, class_name
