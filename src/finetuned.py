@@ -42,7 +42,7 @@ for param in model.parameters():
 for param in model.fc.parameters():
     param.requires_grad = True
 
-# Optionally, unfreeze more layers for fine-tuning
+# Unfreeze more layers for fine-tuning
 # for param in model.layer4.parameters():
 #     param.requires_grad = True
 

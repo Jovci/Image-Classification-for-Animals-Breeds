@@ -16,7 +16,7 @@ transform = transforms.Compose([
 ])
 
 # Number of classes (ensure this matches the number of classes used during training)
-num_classes = 37  # Replace this with the actual number of classes used during training
+num_classes = 37 
 
 # Class names mapping
 class_names = {
@@ -73,7 +73,7 @@ def predict(image_path):
         _, predicted = torch.max(outputs, 1)
     return predicted.item()
 
-# Example usage
+# Usage
 image_path = r'../data/test/siamese.jpg'  
 predicted_class = predict(image_path)
 class_name = class_names[predicted_class]
