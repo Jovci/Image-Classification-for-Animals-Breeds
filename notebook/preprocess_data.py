@@ -2,9 +2,9 @@ import os
 import pandas as pd
 
 # Paths to dataset files
-list_file_path = r'../data/annotations/list.txt'  # Corrected path to your list.txt file
-trainval_file_path = r'../data/annotations/trainval.txt'  # Corrected path to your trainval.txt file
-test_file_path = r'../data/annotations/test.txt'  # Corrected path to your test.txt file
+list_file_path = r'../data/annotations/list.txt'  
+trainval_file_path = r'../data/annotations/trainval.txt' 
+test_file_path = r'../data/annotations/test.txt'  
 
 # Read list.txt to get the mapping
 with open(list_file_path, 'r') as file:
