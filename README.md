@@ -1,6 +1,6 @@
 # Animal Breed Identification with PyTorch
 
-This project aims to develop an image classification model using PyTorch to identify different cat breeds. The model is trained on the Oxford-IIIT Pet Dataset and can classify images of cats into various breeds.
+This project aims to develop an image classification model using PyTorch to identify different animal breeds. The model is trained on the Oxford-IIIT Pet Dataset and can classify images of animals into various breeds.
 
 ## Setup
 
